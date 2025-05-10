@@ -1,6 +1,8 @@
 server:
   port: 9000
 spring:
+  application:
+    name: 'cards'
   datasource:
     url: jdbc:h2:mem:cards
     username: sa
@@ -16,4 +18,6 @@ spring:
     show-sql: true
   profiles:
     active:
-      - prod
+      - qa
+  config:
+    import: 'optional:configserver:http://localhost:8071/'

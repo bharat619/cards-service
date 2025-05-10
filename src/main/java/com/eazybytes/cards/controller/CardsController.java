@@ -2,6 +2,7 @@ package com.eazybytes.cards.controller;
 
 import com.eazybytes.cards.constants.CardsConstants;
 import com.eazybytes.cards.dto.CardDto;
+import com.eazybytes.cards.dto.CardsContactInformation;
 import com.eazybytes.cards.dto.ResponseDto;
 import com.eazybytes.cards.service.ICardService;
 import jakarta.validation.Valid;
@@ -21,10 +22,10 @@ import org.springframework.web.bind.annotation.*;
 public class CardsController {
     private final ICardService cardService;
     private final Environment environment;
+    private final CardsContactInformation cardsContactInformation;
 
-    @Value("#{build.version}")
+    @Value("${build.version}")
     private String buildVersion;
-
 
     @PostMapping("/create")
     public ResponseEntity<ResponseDto> createCard(@Valid @RequestParam @Pattern(regexp = "^$|[0-9]{10}", message = "Mobile Number should be 10 digits") String mobileNumber) {
@@ -76,5 +77,11 @@ public class CardsController {
     public ResponseEntity<String> getBuildInfo() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(environment.getProperty("MAVEN_HOME"));
+    }
+
+    @GetMapping("/contact-info")
+    public ResponseEntity<CardsContactInformation> getContactInfo() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(cardsContactInformation);
     }
 }
