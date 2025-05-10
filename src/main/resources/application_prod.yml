@@ -1,0 +1,15 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+build:
+  version: 2.1.0
+
+cards:
+  message: "Welcome to PROD Cards API"
+  contactDetails:
+    name: "John PROD"
+    email: "johnprod@gmail.com"
+  onCallSupport:
+    - (555) 555-888
+    - (555) 523-999
