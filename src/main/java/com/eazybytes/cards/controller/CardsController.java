@@ -9,6 +9,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -23,7 +25,7 @@ public class CardsController {
     private final ICardService cardService;
     private final Environment environment;
     private final CardsContactInformation cardsContactInformation;
-
+    private static final Logger logger = LoggerFactory.getLogger(CardsController.class);
     @Value("${build.version}")
     private String buildVersion;
 
@@ -36,7 +38,10 @@ public class CardsController {
     }
 
     @GetMapping("/fetch")
-    public ResponseEntity<CardDto> getCard(@Valid @RequestParam @Pattern(regexp = "^$|[0-9]{10}", message = "Mobile Number should be 10 digits") String mobileNumber) {
+    public ResponseEntity<CardDto> getCard(
+            @RequestHeader("eazybank-correlation-id") String correlationId,
+            @Valid @RequestParam @Pattern(regexp = "^$|[0-9]{10}", message = "Mobile Number should be 10 digits") String mobileNumber) {
+        logger.debug("eazybank-correlation-id ID found {}", correlationId);
         CardDto cardDto = cardService.fetchCard(mobileNumber);
         return ResponseEntity
                 .status(HttpStatus.OK)
